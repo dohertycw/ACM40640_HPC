@@ -33,10 +33,10 @@ float ran2(long *idum) {
 		else *idum = -(*idum);
 		idum2=(*idum);
 		for (j=NTAB+7;j>=0;j--) {
-		k=(*idum)/IQ1;
-		*idum=IA1*(*idum-k*IQ1)-k*IR1;
-		if (*idum < 0) *idum += IM1;
-		if (j < NTAB) iv[j] = *idum;
+			k=(*idum)/IQ1;
+			*idum=IA1*(*idum-k*IQ1)-k*IR1;
+			if (*idum < 0) *idum += IM1;
+			if (j < NTAB) iv[j] = *idum;
 		}
 		iy=iv[0];
 	}

@@ -11,10 +11,13 @@ struct matrix {
 
 int getindex(struct matrix w, int i, int j);
 
+float wnew(struct matrix w, int i, int j);
+
 int main(void){
 	int i, j, k;
 	struct matrix w;
-	double w_old;
+	struct matrix temp;
+	double upd, bcond;
 	FILE *fp1, *fp2;
 	
 	w.row = 100;
@@ -36,7 +39,6 @@ int main(void){
 		}
 	}			
 
-
 	fp1 = fopen("matrix_intial.dat", "w");
 	if(fp1 == NULL){
 		printf("Cannot open file.\n");
@@ -50,24 +52,36 @@ int main(void){
 		fprintf(fp1, "\n");
 	}
 
-	for(i = 1; i<w.row-1; i++){
-		for(j = 1; j <w.col-1; j++){
-			w_old = w.matrix[getindex(w,i,j)];
-			w.matrix[getindex(w,i,j)] = (w.matrix[getindex(w,i+1,j)] + w.matrix[getindex(w, i-1, j)] + w.matrix[getindex(w,i,j+1)] + w.matrix[getindex(w, i, j-1)])/4;
-			if(abs(w_old - w.matrix[getindex(w,i,j)]) < pow(10.0, -4.0)){
-				break;
+	bcond = pow(10.0,-4.0);
+
+	temp.row = w.row;
+	temp.col = w.col;
+	temp.matrix = (double *)malloc(w.row*w.col*sizeof(double));
+
+	for(i = 0; i<w.row;i++){
+		for(j = 0; j<w.col;j++){
+			if(i == 0 || j == 0 || i == 99 || j == 99){
+				temp.matrix[getindex(temp,i,j)] = w.matrix[getindex(w,i,j)];
+			} else if(abs(wnew(w,i,j) - w.matrix[getindex(w,i,j)]) > bcond){
+				temp.matrix[getindex(w,i,j)] = wnew(w,i,j);
+			} else {
+				temp.matrix[getindex(w,i,j)] = w.matrix[getindex(w,i,j)];
 			}
 		}
 	}
 
-	fp2 = fopen("matrix_updated.dat", "w");
-	if(fp2 == NULL){
-		printf("Cannot open file.\n");
-		exit(2);
+	for(i = 0; i<w.row;i++){
+		for(j = 0; j<w.row;j++){
+			w.matrix[getindex(w,i,j)] = temp.matrix[getindex(w,i,j)];
+		}
 	}
 
-	for(i = 0; i<w.row;i++){
-		for(j=0;j<w.col;j++){
+	free(temp.matrix);
+
+	fp2 = fopen("matrix_updated.dat", "w");
+
+	for(i = 0; i<w.row; i++){
+		for(j=0; j<w.col;j++){
 			fprintf(fp2, "%f ", w.matrix[getindex(w,i,j)]);
 		}
 		fprintf(fp2, "\n");
@@ -82,5 +96,11 @@ int main(void){
 
 int getindex(struct matrix w, int i, int j){
 	return w.col*i + j;
+}
+
+float wnew(struct matrix w, int i, int j){
+	float num = w.matrix[getindex(w,i + 1,j)] + w.matrix[getindex(w, i - 1, j)] + w.matrix[getindex(w, i, j+1)] +  w.matrix[getindex(w, i, j-1)];
+	float val = num/4.0;
+	return val;
 }
 
