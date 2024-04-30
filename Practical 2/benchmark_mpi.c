@@ -21,17 +21,17 @@ int main(int argc, char *argv[])
 
     num_runs = 2;
     FILE *pFile;
-    int size_1 = 1000000;
-    int size_2 = 10000000;
-    int size_3 = 100000000;
-    int size_4 = 1000000000;
+    int size_1 = 10;
+    int size_2 = 100;
+    int size_3 = 1000;
+    int size_4 = 10000;
     // Generate the time and value arrays on process 0
     int i;
     int k;
     pFile = fopen("mpi_results.txt", "a");
     if (size == 1)
     {
-        fprintf(pFile, "Num_threads\t10^6\t10^7\t10^8\t10^9\n");
+        fprintf(pFile, "Num_threads\t10\t100\t1000\t10000\n");
     }
     array_size = size_1;
     if (rank == 0)

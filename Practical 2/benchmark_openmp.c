@@ -7,12 +7,12 @@
 int main(int argc, char *argv[])
 {
     FILE *pFile;
-    int size_1 = 1000000;
-    int size_2 = 10000000;
-    int size_3 = 100000000;
-    int size_4 = 1000000000;
+    int size_1 = 10;
+    int size_2 = 100;
+    int size_3 = 1000;
+    int size_4 = 10000;
     pFile = fopen("openmp_results.txt", "a");
-    fprintf(pFile, "Num_threads\t10^6\t10^7\t10^8\t10^9\n");
+    fprintf(pFile, "Num_threads\t10\t100\t10^3\t10^4\n");
     //  Iterate through doing the calculation for the job sizes and thread numbers
     int thread_count = 1;
     for (thread_count = 1; thread_count < 101; thread_count++)
